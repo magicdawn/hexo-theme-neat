@@ -2,6 +2,25 @@
 
 {% set title = page.title || '首页' %}
 
+{% block css %}
+<link rel="stylesheet" href="/build/css/home.css">
+{% endblock %}
+
+{% block js %}
+<script src='/build/js/home.js'></script>
+{% endblock %}
+
 {% block body %}
-  hello hexo.io
+<div class="container">
+  <ul class="posts">
+    {% for p in site.posts %}
+      <li>
+        <a href="{{ url_for(p.path) }}">
+          {{ p.title }}
+        </a>
+        <div class="pull-right">{{ p.date.format('YYYY-MM-DD HH:mm:ss')  }}</div>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
 {% endblock %}

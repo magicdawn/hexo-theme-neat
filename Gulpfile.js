@@ -13,6 +13,13 @@ const fs = require('fs-extra');
 const co = require('co');
 const _ = require('lodash');
 const through = require('through2');
+const argv = require('minimist')(process.argv.slice(2), {
+  boolean: ['watch'],
+  alias: {
+    'w': 'watch'
+  }
+});
+
 // less plugins
 const LessPluginCleanCss = require('less-plugin-clean-css');
 const LessPluginNpmImport = require('less-plugin-npm-import');
@@ -21,8 +28,13 @@ const LessPluginAutoprefix = require('less-plugin-autoprefix');
 /**
  * patch
  */
+
+// browserify
 const Browserify = browserify;
 Browserify.prototype.bundleAsync = Promise.promisify(Browserify.prototype.bundle);
+
+// env
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 /**
  * consts
@@ -43,7 +55,9 @@ const jsConfig = {
 gulp.task('bundle', ['bundle:base', 'bundle:page']);
 
 gulp.task('bundle:base', (cb) => {
-  let b = browserify();
+  let b = browserify({
+    debug: process.env.NODE_ENV !== 'production'
+  });
   const baseJs = fs.createOutputStream(`${ __dirname }/${ jsConfig.baseDest }`);
 
   for(let lib of jsConfig.base){
@@ -62,7 +76,9 @@ gulp.task('bundle:page', () => {
     for(let js of jss){
       const src = `${ __dirname }/source/_src/js/${ js }`;
       const dest = `${ __dirname }/source/build/js/${ js }`;
-      const b = browserify(src);
+      const b = browserify(src, {
+        debug: process.env.NODE_ENV !== 'production'
+      });
 
       for(let libname of _.pluck(jsConfig.base, 'expose')){
         b.external(libname);
@@ -91,4 +107,15 @@ gulp.task('less', () => {
       cb(null, row);
     }))
     .pipe(gulp.dest('source/build/css/'))
+});
+
+let watched = false;
+gulp.task('build', ['less', 'bundle'], function(){
+  if(!watched && argv.watch) {
+    watched = true;
+    gulp.watch([
+      'source/_src/**/*.less',
+      'source/_src/**/*.js'
+    ],['build']);
+  }
 });
