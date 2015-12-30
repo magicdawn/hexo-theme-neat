@@ -12,6 +12,7 @@ const glob = require('glob');
 const fs = require('fs-extra');
 const co = require('co');
 const _ = require('lodash');
+const through = require('through2');
 
 /**
  * patch
@@ -68,4 +69,13 @@ gulp.task('bundle:page', () => {
       fs.outputFileSync(dest, content, 'utf8');
     }
   });
+});
+
+gulp.task('less', () => {
+  return gulp.src('source/_src/css/*.less')
+    .pipe(through.obj((row, enc, cb) => {
+      row.path = row.path.replace(/\.less/, '.css');
+      cb(null, row);
+    }))
+    .pipe(gulp.dest('source/build/css/'))
 });
