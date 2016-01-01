@@ -42,7 +42,8 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 const jsConfig = {
   base: [
     { require: 'jquery', expose: 'jquery' },
-    { require: 'bootstrap', expose: 'bootstrap' }
+    { require: 'bootstrap', expose: 'bootstrap' },
+    { require: 'highlight.js', expose: 'highlight.js' }
   ],
   baseDest: 'source/build/js/base.js'
 };
