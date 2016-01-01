@@ -4,6 +4,7 @@
 
 {% block css %}
 <link rel="stylesheet" href="/build/css/post.css">
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/default.min.css">
 {% endblock %}
 
 {% block js %}
@@ -13,7 +14,6 @@
 {% block body %}
 <div class="container">
   <div class="post">
-    page.content 出不来...
     {{ page.content | safe }}
   </div>
 </div>
