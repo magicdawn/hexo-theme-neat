@@ -61,7 +61,7 @@ gulp.task('bundle:base', (cb) => {
   });
   const baseJs = fs.createOutputStream(`${ __dirname }/${ jsConfig.baseDest }`);
 
-  for(let lib of jsConfig.base){
+  for (let lib of jsConfig.base) {
     b.require(lib.require, { expose: lib.expose });
   }
 
@@ -73,15 +73,15 @@ gulp.task('bundle:base', (cb) => {
 gulp.task('bundle:page', () => {
   const jss = glob.sync('*.js', { cwd: __dirname + '/source/_src/js' });
 
-  return co(function *() {
-    for(let js of jss){
+  return co(function* () {
+    for (let js of jss) {
       const src = `${ __dirname }/source/_src/js/${ js }`;
       const dest = `${ __dirname }/source/build/js/${ js }`;
       const b = browserify(src, {
         debug: process.env.NODE_ENV !== 'production'
       });
 
-      for(let libname of _.pluck(jsConfig.base, 'expose')){
+      for (let libname of _.pluck(jsConfig.base, 'expose')) {
         b.external(libname);
       }
 
@@ -111,12 +111,12 @@ gulp.task('less', () => {
 });
 
 let watched = false;
-gulp.task('build', ['less', 'bundle'], function(){
-  if(!watched && argv.watch) {
+gulp.task('build', ['less', 'bundle'], function () {
+  if (!watched && argv.watch) {
     watched = true;
     gulp.watch([
       'source/_src/**/*.less',
       'source/_src/**/*.js'
-    ],['build']);
+    ], ['build']);
   }
 });
