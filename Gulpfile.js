@@ -40,11 +40,16 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
  * consts
  */
 const jsConfig = {
-  base: [
-    { require: 'jquery', expose: 'jquery' },
-    { require: 'bootstrap', expose: 'bootstrap' },
-    { require: 'highlight.js', expose: 'highlight.js' }
-  ],
+  base: [{
+    require: 'jquery',
+    expose: 'jquery'
+  }, {
+    require: 'bootstrap',
+    expose: 'bootstrap'
+  }, {
+    require: 'highlight.js',
+    expose: 'highlight.js'
+  }],
   baseDest: 'source/build/js/base.js'
 };
 
@@ -62,7 +67,9 @@ gulp.task('bundle:base', (cb) => {
   const baseJs = fs.createOutputStream(`${ __dirname }/${ jsConfig.baseDest }`);
 
   for (let lib of jsConfig.base) {
-    b.require(lib.require, { expose: lib.expose });
+    b.require(lib.require, {
+      expose: lib.expose
+    });
   }
 
 
@@ -71,9 +78,11 @@ gulp.task('bundle:base', (cb) => {
 });
 
 gulp.task('bundle:page', () => {
-  const jss = glob.sync('*.js', { cwd: __dirname + '/source/_src/js' });
+  const jss = glob.sync('*.js', {
+    cwd: __dirname + '/source/_src/js'
+  });
 
-  return co(function* () {
+  return co(function*() {
     for (let js of jss) {
       const src = `${ __dirname }/source/_src/js/${ js }`;
       const dest = `${ __dirname }/source/build/js/${ js }`;
@@ -111,7 +120,7 @@ gulp.task('less', () => {
 });
 
 let watched = false;
-gulp.task('build', ['less', 'bundle'], function () {
+gulp.task('build', ['less', 'bundle'], function() {
   if (!watched && argv.watch) {
     watched = true;
     gulp.watch([
