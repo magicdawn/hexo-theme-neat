@@ -3,10 +3,13 @@
 @import (inline) 'npm://highlight.js/styles/@{theme}.css';
 
 pre{
-  background-color: #fdf6e3;
+  padding: 0;
 
+  // 使 highlight 前后保持一致
+  // padding, font-family, font-size
   code.hljs, code{
-    padding: 0;
+    padding: 0.5em;
+    display: block;
     font-size: 14px;
     font-family: 'Ubuntu Mono', Hack, Menlo, Monoca, Consolas;
   }
