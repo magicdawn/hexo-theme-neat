@@ -32,6 +32,7 @@
     "less-plugin-clean-css": "^1.5.1",
     "less-plugin-npm-import": "^2.1.0",
     "minimist": "^1.2.0",
+    "normalize.css": "^3.0.3",
     "through2": "^2.0.0"
   }
 }
