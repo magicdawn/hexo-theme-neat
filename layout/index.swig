@@ -12,13 +12,18 @@
 
 {% block body %}
 <div class="container">
+  <header class="blog-name">
+    Land of Ranger
+  </header>
+
+  <p>Posts: </p>
   <ul class="posts">
     {% for p in site.posts %}
       <li>
         <a href="{{ url_for(p.path) }}">
           {{ p.title }}
         </a>
-        <div class="pull-right">{{ p.date.format('YYYY-MM-DD HH:mm:ss')  }}</div>
+        <div class="time">{{ p.date.format('YYYY-MM-DD HH:mm:ss')  }}</div>
       </li>
     {% endfor %}
   </ul>

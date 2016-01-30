@@ -1,21 +1,30 @@
 // @import 'npm://bootstrap';
 @import (inline) 'npm://normalize.css/normalize.css';
+@import './variable';
 
 html, body{
   font-family: Hack;
 }
 
 body{
-  padding-top: 50px;
+  padding-top: @a-height;
+  background-color: @bg;
+  min-height: 500px;
+
+  > footer{
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
 }
 
-header{
+@a-height: 40px;
+header.nav{
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  border-radius: 5px;
-  background-color: #eee;
+  background-color: @bg;
+  border-bottom: 1px solid @highlight;
 
   ul.links{
     list-style: none;
@@ -29,14 +38,14 @@ header{
 
       a{
         display: block;
-        height: 50px;
-        line-height: 50px;
+        height: @a-height;
+        line-height: @a-height;
         text-align: center;
         text-decoration: none;
         color: #666;
 
         &:hover, &.active{
-          background-color: #42b983;
+          background-color: @highlight;
           color: #fff;
         }
       }

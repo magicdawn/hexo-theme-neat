@@ -17,6 +17,7 @@
     "bootstrap": "^3.3.6",
     "co": "^4.6.0",
     "fs-extra": "^0.26.3",
+    "github-markdown-css": "^2.2.1",
     "glob": "^6.0.3",
     "highlight.js": "^9.0.0",
     "jquery": "^2.1.4"

@@ -1,19 +1,33 @@
+/**
+ * style for post page
+ */
+
 // 代码高亮
 @theme: 'solarized-light';
 @import (inline) 'npm://highlight.js/styles/@{theme}.css';
+// markdown render
+@import 'npm://github-markdown-css';
+// @import 'https://blog.egoistian.com/css/main.css?v=0.0.1005';
 
-pre{
-  padding: 0;
+.markdown-body{
+  font-family: inherit;
+  font-size: 1.3em;
 
-  // 使 highlight 前后保持一致
-  // padding, font-family, font-size
-  code.hljs, code{
-    padding: 0.5em;
-    display: block;
-    font-size: 14px;
-    font-family: 'Ubuntu Mono', Hack, Menlo, Monoca, Consolas;
+  h1,h2,h3,h4,h5,h6{
+    border-color: #eee8d5;
+    color: #b58900;
+  }
+
+  pre{
+    background-color: #eee8d5;
+
+    code.hljs, code{
+      font-family: 'Ubuntu Mono', Hack, Menlo, Monoca, Consolas;
+      font-size: 1.3em;
+    }
   }
 }
+
 
 .post{
   margin-top: 20px;
