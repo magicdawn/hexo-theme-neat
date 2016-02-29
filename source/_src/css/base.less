@@ -12,8 +12,13 @@ body{
   min-height: 500px;
 
   > footer{
-    margin-top: 20px;
-    margin-bottom: 10px;
+    margin-top: 40px;
+    margin-bottom: 30px;
+
+    a{
+      color: @highlight;
+      text-decoration: none;
+    }
   }
 }
 
@@ -42,7 +47,7 @@ header.nav{
         line-height: @a-height;
         text-align: center;
         text-decoration: none;
-        color: #666;
+        color: @highlight;
 
         &:hover, &.active{
           background-color: @highlight;

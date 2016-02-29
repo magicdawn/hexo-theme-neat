@@ -12,16 +12,12 @@
 
 {% block body %}
 <div class="container">
-  <header class="blog-name">
-    Land of Ranger
-  </header>
-
-  <p>Posts: </p>
   <ul class="posts">
-    {% for p in site.posts %}
+    {% for p in site.posts.sort('date', 'desc') %}
       <li>
         <a href="{{ url_for(p.path) }}">
-          {{ p.title }}
+          {# max 50 char #}
+          {{ p.title.slice(0, 50) }}
         </a>
         <div class="time">{{ p.date.format('YYYY-MM-DD HH:mm:ss')  }}</div>
       </li>

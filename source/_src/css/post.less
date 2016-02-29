@@ -8,6 +8,7 @@
 // markdown render
 @import 'npm://github-markdown-css';
 // @import 'https://blog.egoistian.com/css/main.css?v=0.0.1005';
+@import './variable';
 
 .markdown-body{
   font-family: inherit;
@@ -25,6 +26,11 @@
       font-family: 'Ubuntu Mono', Hack, Menlo, Monoca, Consolas;
       font-size: 1.3em;
     }
+  }
+
+  a{
+    color: @highlight;
+    text-decoration: none;
   }
 }
 
