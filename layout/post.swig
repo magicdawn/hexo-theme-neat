@@ -16,5 +16,9 @@
     <h1>{{ page.title }}</h1>
     {{ page.content | safe }}
   </div>
+
+  <div class="duoshuo">
+    {% include '_partials/duoshuo.swig' %}
+  </div>
 </div>
 {% endblock %}
