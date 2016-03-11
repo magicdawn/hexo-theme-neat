@@ -4,15 +4,22 @@
  * module dependencies
  */
 
-GLOBAL.Promise = require('bluebird');
+const fs = require('needle-kit').fs;
 const gulp = require('gulp');
 const $ = require('gulp-load-plugins')();
 const browserify = require('browserify');
 const glob = require('glob');
-const fs = require('fs-extra');
 const co = require('co');
 const _ = require('lodash');
 const through = require('through2');
+const promiseify = require('promise.ify');
+var runSequence = require('run-sequence');
+const UglifyJS = require('uglify-js');
+
+/**
+ * argv
+ */
+
 const argv = require('minimist')(process.argv.slice(2), {
   boolean: ['watch'],
   alias: {
@@ -20,7 +27,10 @@ const argv = require('minimist')(process.argv.slice(2), {
   }
 });
 
-// less plugins
+/**
+ * less plugins
+ */
+
 const LessPluginCleanCss = require('less-plugin-clean-css');
 const LessPluginNpmImport = require('less-plugin-npm-import');
 const LessPluginAutoprefix = require('less-plugin-autoprefix');
@@ -30,8 +40,11 @@ const LessPluginAutoprefix = require('less-plugin-autoprefix');
  */
 
 // browserify
-const Browserify = browserify;
-Browserify.prototype.bundleAsync = Promise.promisify(Browserify.prototype.bundle);
+const bproto = browserify.prototype;
+bproto.bundleAsync = promiseify(bproto.bundle);
+
+// gulp
+gulp.startAsync = promiseify(gulp.start);
 
 // env
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
@@ -39,6 +52,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 /**
  * consts
  */
+
 const jsConfig = {
   base: [{
     require: 'jquery',
@@ -54,13 +68,30 @@ const jsConfig = {
 };
 
 
+const minify = function(js){
+  return UglifyJS.minify(js, {fromString: true}).code;
+};
+
+const minStream = function(){
+  var buf = [];
+  return through(function(chunk, enc, cb) {
+    buf.push(chunk);
+    cb();
+  }, function(cb) {
+    let js = Buffer.concat(buf).toString('utf8');
+    js = minify(js);
+    this.push(js, 'utf8');
+    cb();
+  });
+};
+
 /**
  * js browserify
  */
 
-gulp.task('bundle', ['bundle:base', 'bundle:page']);
+gulp.task('js', ['js:base', 'js:page']);
 
-gulp.task('bundle:base', (cb) => {
+gulp.task('js:base', (cb) => {
   let b = browserify({
     debug: process.env.NODE_ENV !== 'production'
   });
@@ -73,11 +104,19 @@ gulp.task('bundle:base', (cb) => {
   }
 
 
-  b.bundle().on('error', cb)
-    .pipe(baseJs).on('close', cb);
+  // bundle
+  b = b.bundle().on('error', cb);
+
+  // minify
+  if(process.env.NODE_ENV === 'production') {
+    b = b.pipe(minStream());
+  }
+
+  // write
+  b.pipe(baseJs).on('close', cb);
 });
 
-gulp.task('bundle:page', () => {
+gulp.task('js:page', () => {
   const jss = glob.sync('*.js', {
     cwd: __dirname + '/source/_src/js'
   });
@@ -96,6 +135,13 @@ gulp.task('bundle:page', () => {
 
       let content = yield b.bundleAsync();
       content = content.toString('utf8');
+
+      // min
+      if(process.env.NODE_ENV === 'production') {
+        content = minify(content);
+      }
+
+      // write
       fs.outputFileSync(dest, content, 'utf8');
     }
   });
@@ -119,13 +165,27 @@ gulp.task('less', () => {
     .pipe(gulp.dest('source/build/css/'))
 });
 
+
+/**
+ * dev
+ */
+
 let watched = false;
-gulp.task('build', ['less', 'bundle'], function() {
-  if (!watched && argv.watch) {
+gulp.task('dev', ['less', 'js'], function() {
+  if (!watched) {
     watched = true;
     gulp.watch([
       'source/_src/**/*.less',
       'source/_src/**/*.js'
-    ], ['build']);
+    ], ['dev']);
   }
+});
+
+/**
+ * build
+ */
+
+gulp.task('build', function(done){
+  process.env.NODE_ENV = 'production';
+  gulp.start('js', 'less');
 });
