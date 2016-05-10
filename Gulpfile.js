@@ -129,7 +129,7 @@ gulp.task('js:page', () => {
         debug: process.env.NODE_ENV !== 'production'
       });
 
-      for (let libname of _.pluck(jsConfig.base, 'expose')) {
+      for (let libname of _.map(jsConfig.base, 'expose')) {
         b.external(libname);
       }
 
