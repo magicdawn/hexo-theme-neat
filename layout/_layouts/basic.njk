@@ -12,8 +12,8 @@
   <header class="nav">
     <div class="container">
       <ul class="links">
-        <li class="{% if !activeKey || activeKey === 'home' %}active{% endif %}"><a href="/">Home</a></li>
-        <li class="{% if activeKey === 'about' %}active{% endif %}"><a href="/about">About</a></li>
+        <li class="{{ 'active' if not activeKey or activeKey == 'home' }}"><a href="/">Home</a></li>
+        <li class="{{ 'active' if activeKey == 'about' }}"><a href="/about">About</a></li>
       </ul>
     </div>
   </header>

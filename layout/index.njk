@@ -1,6 +1,6 @@
-{% extends '_layouts/basic.swig' %}
+{% extends './_layouts/basic.njk' %}
 
-{% set title = page.title || '首页' %}
+{% set title = page.title or '首页' %}
 
 {% block css %}
 <link rel="stylesheet" href="/build/css/home.css">

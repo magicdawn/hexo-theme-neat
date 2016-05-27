@@ -36,6 +36,7 @@
     "minimist": "^1.2.0",
     "needle-kit": "^1.2.0",
     "normalize.css": "^3.0.3",
+    "nunjucks": "^2.4.2",
     "promise.ify": "^0.2.0",
     "run-sequence": "^1.1.5",
     "through2": "^2.0.0",
